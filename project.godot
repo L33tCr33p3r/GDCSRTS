@@ -11,9 +11,18 @@ config_version=5
 [application]
 
 config/name="GDCSRTS"
-config/features=PackedStringArray("4.0", "Forward Plus")
+run/main_scene="res://height_map.tscn"
+config/features=PackedStringArray("4.0", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[debug]
+
+settings/stdout/print_fps=true
 
 [dotnet]
 
 project/assembly_name="GDCSRTS"
+
+[rendering]
+
+anti_aliasing/quality/msaa_3d=2
