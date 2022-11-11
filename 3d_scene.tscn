@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3 uid="uid://b3x4nc6y86cj0"]
+
+[ext_resource type="Script" path="res://PlayerView.cs" id="1_076m1"]
+[ext_resource type="PackedScene" uid="uid://sv6ihko1jjun" path="res://height_map.tscn" id="2_jh1mn"]
+[ext_resource type="PackedScene" uid="uid://cr5isewae411g" path="res://player_view.tscn" id="3_v0rbk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8lkj8"]
+sky_top_color = Color(0.166693, 0.278151, 0.419402, 1)
+sky_horizon_color = Color(0.582221, 0.671354, 0.860585, 1)
+ground_bottom_color = Color(0.148385, 0.18514, 0.223993, 1)
+ground_horizon_color = Color(0.330452, 0.467375, 0.692741, 1)
+sun_angle_max = 0.0
+
+[sub_resource type="Sky" id="Sky_pjj7g"]
+sky_material = SubResource("ProceduralSkyMaterial_8lkj8")
+
+[sub_resource type="Environment" id="Environment_53k4e"]
+background_mode = 2
+sky = SubResource("Sky_pjj7g")
+tonemap_mode = 3
+tonemap_white = 16.0
+
+[node name="3D Scene" type="Node3D"]
+script = ExtResource("1_076m1")
+
+[node name="HeightMap" parent="." instance=ExtResource("2_jh1mn")]
+
+[node name="PlayerView" parent="." instance=ExtResource("3_v0rbk")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.707107, -0.353553, 0.612372, 2.98023e-08, 0.866025, 0.5, -0.707107, 0.353554, -0.612372, 0, 0, 0)
+shadow_enabled = true
+shadow_blur = 0.0
+directional_shadow_max_distance = 20.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_53k4e")

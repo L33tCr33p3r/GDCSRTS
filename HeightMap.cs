@@ -4,51 +4,51 @@ using System;
 public partial class HeightMap : Node
 {
 	[Export]
-	public int size = 100;
+	public int size = 200;
 
-	public float[,] Ground { get; protected set; }
-	public float[,] Water { get; protected set; }
+	// public float[,] Ground { get; protected set; } // TODO: actually set something in these variables during terrain generation
+	// public float[,] Water { get; protected set; }
 
 	public override void _Ready()
 	{
-		generateData(0);
-		generateMesh();
+		generateMesh(0);
 	}
 
-	private void generateData(int seed, float scale = 1.0f)
+	private void generateMesh(int seed, float hscale = 20.0f, float vscale = 1.0f) 
 	{
-		Ground = new float[size, size];
-		Water = new float[size, size];
+		var plane = new PlaneMesh();
+		plane.Size = new Vector2(6, 6);
+		plane.SubdivideDepth = size;
+		plane.SubdivideWidth = size;
+
+		var plane_mesh = new ArrayMesh();
+		plane_mesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, plane.SurfaceGetArrays(0));
+
+		var md = new MeshDataTool();
+		// st.Begin(Mesh.PrimitiveType.Triangles);
+		md.CreateFromSurface(plane_mesh, 0); // for some reason this function only takes ArrayMesh
 
 		FastNoiseLite noise = new();
 		noise.Seed = seed;
-		
-		for (int x = 0; x < size; x++)
-		{
-			for (int y = 0; y < size; y++)
-			{
-				Ground[x, y] = noise.GetNoise2d(x * scale, y * scale);
-			}
-		}
-	}
+		noise.FractalOctaves = 10;
 
-	private void generateMesh() 
-	{
+		for (int i = 0; i < md.GetVertexCount(); i++)
+		{
+			Vector3 pos = md.GetVertex(i);
+			float height = noise.GetNoise2d(pos.x * hscale, pos.z * hscale);
+			md.SetVertex(i, new Vector3(pos.x, height * vscale, pos.z));
+		}
+
+		var final_mesh = new ArrayMesh();
+		md.CommitToSurface(final_mesh);
+
 		var st = new SurfaceTool();
-		st.Begin(Mesh.PrimitiveType.Triangles); // TODO: use tristrips instead
-		st.SetColor(new Color(0.8f, 0.8f, 0.8f));
-		for (int x = 0; x < size; x++)
-		{
-			for (int y = 0; y < size; y++)
-			{
-				st.AddVertex(new Vector3(x * 0.05f, Ground[x, y], y * 0.05f + 0.05f));
-				st.AddVertex(new Vector3(x * 0.05f, Ground[x, y], y * 0.05f));
-				st.AddVertex(new Vector3(x * 0.05f + 0.05f, Ground[x, y], y * 0.05f));
-			}
-		}
-
+		st.CreateFrom(final_mesh, 0);
 		st.GenerateNormals();
+		final_mesh = st.Commit();
 
-		GetNode<MeshInstance3D>("MeshInstance3D").Mesh = st.Commit();
+		final_mesh.ShadowMesh = final_mesh;
+
+		GetNode<MeshInstance3D>("MeshInstance3D").Mesh = final_mesh;
 	}
 }
