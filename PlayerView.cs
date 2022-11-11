@@ -7,10 +7,12 @@ public partial class PlayerView : Node3D
 	float Speed = 1;
 
 	Vector2 _mouse_motion = new();
+	Node3D? _pivot;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		_pivot = GetNode<Node3D>("Pivot");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -25,7 +27,8 @@ public partial class PlayerView : Node3D
 		Position += move_dir * (float) delta; // apply the movement
 
 		RotateY(_mouse_motion.x * (float) delta); // TODO: make this rotate on global y instead of local
-		RotateX(_mouse_motion.y * (float) delta); // this should rotate the camera, but that has a weird problem
+		_pivot!.RotateX(_mouse_motion.y * (float) delta);
+		// RotateObjectLocal(new Vector3(1, 0, 0), _mouse_motion.y * (float) delta); // this should rotate the camera, but that has a weird problem
 		// var camera = GetNode<Camera3D>("Camera"); // TODO: see if this is a bug that should be reported
 		// var rotation_x = _mouse_motion.y * (float) delta;
 		// var rotation_basis = new Basis(new Vector3(1, 0, 0), rotation_x);
@@ -38,9 +41,9 @@ public partial class PlayerView : Node3D
 	{
 		if (Input.IsActionPressed("pan")) 
 		{
+			Input.MouseMode = Input.MouseModeEnum.Captured;
 			if (e is InputEventMouseMotion)
 			{
-				Input.MouseMode = Input.MouseModeEnum.Captured;
 				_mouse_motion = -((InputEventMouseMotion) e).Relative;
 			}
 		}

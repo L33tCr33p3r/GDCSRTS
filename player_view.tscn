@@ -5,5 +5,7 @@
 [node name="PlayerView" type="Node3D"]
 script = ExtResource("1_qjfep")
 
-[node name="Camera" type="Camera3D" parent="."]
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="Camera" type="Camera3D" parent="Pivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000414252, -0.009076, 0)
