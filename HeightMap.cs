@@ -50,5 +50,6 @@ public partial class HeightMap : Node
 		final_mesh.ShadowMesh = final_mesh;
 
 		GetNode<MeshInstance3D>("MeshInstance3D").Mesh = final_mesh;
+		GetNode<CollisionShape3D>("StaticBody3D/CollisionShape3D").Shape = final_mesh.CreateTrimeshShape();
 	}
 }

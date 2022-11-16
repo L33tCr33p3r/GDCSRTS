@@ -26,6 +26,8 @@ public partial class PlayerView : Node3D
 
 		Position += move_dir * (float) delta; // apply the movement
 
+		// _pivot!.GlobalPosition = new Vector3(Position.x, GetNode<RayCast3D>("RayCast3D").GetCollisionPoint().y, Position.z);
+
 		RotateY(_mouse_motion.x * (float) delta); // TODO: make this rotate on global y instead of local
 		_pivot!.RotateX(_mouse_motion.y * (float) delta);
 		// RotateObjectLocal(new Vector3(1, 0, 0), _mouse_motion.y * (float) delta); // this should rotate the camera, but that has a weird problem

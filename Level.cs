@@ -3,7 +3,7 @@ using System;
 
 public partial class Level : Node
 {
-	public HeightMap Map { get; init; } = new(100, 0);
+	public HeightMap Map { get; init; }
 	public List<Unit> Units { get; set; } = new();
 
 	public override void _Ready()
