@@ -48,10 +48,21 @@ internal partial class Unit : Node3D
 	// Evaluates Order queue to decide what the unit's current goal is.
 	private void EvaluateGoal()
 	{
-		var currentOrder = _orders.Peek();
+		if (_orders.Count != 0) 
+		{
+			var currentOrder = _orders.Peek();
+			if (currentOrder.GetType() == typeof(MoveOrder)) // Checks if currentOrder is a MoveOrder
+			{
+				_goal = currentOrder; // Copies curentOrder to _goal, no extra logic is needed for MoveOrders
+			}
+		}
+		else
+		{
+			_goal = null;
+		}
 	}
 
-	// Tries to complete whatever the unit's current goal is
+	// Tries to complete whatever the unit's current goal is. 
 	private void PerformGoal()
 	{
 		if (_goal != null) // If the unit has a goal, tries to execute it.
