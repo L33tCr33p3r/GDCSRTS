@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GDCSRTS"
-run/main_scene="res://3d_scene.tscn"
+run/main_scene="res://Scene/3d_scene.tscn"
 config/features=PackedStringArray("4.0", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 

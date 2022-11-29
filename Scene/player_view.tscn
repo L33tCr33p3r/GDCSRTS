@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cr5isewae411g"]
+[gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://PlayerView.cs" id="1_qjfep"]
+[ext_resource type="Script" path="res://Script/PlayerView.cs" id="1_qjfep"]
 
 [node name="PlayerView" type="Node3D"]
 script = ExtResource("1_qjfep")
