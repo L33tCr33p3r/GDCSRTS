@@ -4,11 +4,11 @@
 internal record MoveOrder : Order
 {
 	// Properties of a MoveOrder
-	Vector3 MoveTarg { get; init; }
-	FlowField MoveFlowField { get; init; }
+	public Vector3 MoveTarg { get; init; }
+	public FlowField MoveFlowField { get; init; }
 
 	// Constructor
-	MoveOrder(Vector3 moveTarg)
+	public MoveOrder(Vector3 moveTarg)
 	{
 		MoveTarg = moveTarg;
 		MoveFlowField = new(); // TODO: This constructor should take the moveTarg as well
