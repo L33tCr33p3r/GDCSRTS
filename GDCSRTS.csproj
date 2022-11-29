@@ -2,13 +2,11 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
-    <None Include="GDCSRTS.sln" />
     <None Include="icon.svg" />
     <None Include="icon.svg.import" />
     <None Include="planning\network.md" />

@@ -1,5 +1,4 @@
-using Godot;
-
+// Does HeightMap things
 internal partial class HeightMap : Node
 {
 	[Export]

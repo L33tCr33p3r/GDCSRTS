@@ -1,6 +1,5 @@
-using Godot;
-
-internal partial class Unit : Node3D
+// Base class for all Units
+internal abstract partial class Unit : Node3D
 {
 	public enum FireStance
 	{
