@@ -2,5 +2,5 @@
 internal abstract record Order
 {
 	// Properties of all Orders
-	public Guid OrderID { get; set; } = new();
+	public Guid OrderId { get; init; } = new();
 }

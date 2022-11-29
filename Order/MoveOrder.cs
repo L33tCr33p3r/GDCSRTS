@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-// Concrete type of all Movevent orders
+// For Orders where a unit is moving to a point in space
 internal record MoveOrder : Order
 {
 	// Properties of a MoveOrder
