@@ -4,18 +4,18 @@ using System;
 public partial class HeightMap : Node
 {
 	[Export]
-	public int size = 10;
+	public int size = 1000;
 
 	public float[,]? Ground { get; protected set; } // TODO: actually set something in these variables during terrain generation
 	// public float[,] Water { get; protected set; }
 
 	public override void _Ready()
 	{
-		GenerateData(0);
-		generateMesh(0);
+		generateData(0);
+		generateMesh();
 	}
 
-	private void GenerateData(int seed, float scale = 20.0f) {
+	private void generateData(int seed, float hscale = 0.5f, float vscale = 5.0f) {
 		Ground = new float[size, size];
 
 		FastNoiseLite noise = new();
@@ -27,12 +27,12 @@ public partial class HeightMap : Node
 		{
 			for (int y = 0; y < size; y++)
 			{
-				Ground[x, y] = noise.GetNoise2d(x * scale, y * scale);
+				Ground[x, y] = MathF.Pow(noise.GetNoise2d(x / hscale, y / hscale), 2.0f) * vscale;
 			}
 		}
 	}
 
-	private void generateMesh(float scale = 1.0f) 
+	private void generateMesh(float hscale = 0.5f) 
 	{
 		if (Ground == null)
 		{
@@ -42,9 +42,9 @@ public partial class HeightMap : Node
 
 		// this gets us the vertices connected in the right way
 		var plane = new PlaneMesh();
-		plane.Size = new Vector2(size, size);
-		plane.SubdivideDepth = size;
-		plane.SubdivideWidth = size;
+		plane.Size = new Vector2(size * hscale, size * hscale);
+		plane.SubdivideDepth = size - 2; // subtract 2 so that the nuber of vertices actually matches the number of sample points
+		plane.SubdivideWidth = size - 2;
 
 		// convert the PlaneMesh into an ArrayMesh so that we can edit it
 		var plane_mesh = new ArrayMesh();
@@ -58,7 +58,7 @@ public partial class HeightMap : Node
 		for (int i = 0; i < md.GetVertexCount(); i++)
 		{
 			Vector3 pos = md.GetVertex(i);
-			md.SetVertex(i, new Vector3(pos.x, Ground[0, 0] * scale, pos.z));
+			md.SetVertex(i, new Vector3(pos.x, Ground[i % size, i / size], pos.z));
 		}
 
 		var final_mesh = new ArrayMesh();
