@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class HeightMap : Node
+internal partial class HeightMap : Node
 {
 	[Export]
 	public int size = 1000;

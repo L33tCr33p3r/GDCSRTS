@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class Unit : Node3D
+internal partial class Unit : Node3D
 {
 	public enum FireStance
 	{

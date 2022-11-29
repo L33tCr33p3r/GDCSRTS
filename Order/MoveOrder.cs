@@ -3,6 +3,14 @@
 // Concrete type of all Movevent orders
 internal record MoveOrder : Order
 {
-	Vector3 MoveTarg;
-	FlowField MoveFlowField;
+	// Properties of a MoveOrder
+	Vector3 MoveTarg { get; init; }
+	FlowField MoveFlowField { get; init; }
+
+	// Constructor
+	MoveOrder(Vector3 moveTarg)
+	{
+		MoveTarg = moveTarg;
+		MoveFlowField = new(); // TODO: This constructor should take the moveTarg as well
+	}
 }

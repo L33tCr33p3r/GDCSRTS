@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class PlayerView : Node3D
+internal partial class PlayerView : Node3D
 {
 	[Export]
 	float Speed = 10;

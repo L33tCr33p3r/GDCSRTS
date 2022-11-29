@@ -1,7 +1,6 @@
 using Godot;
-using System;
 
-public partial class Level : Node
+internal partial class Level : Node
 {
 	// public HeightMap Map { get; init; }
 	public List<Unit> Units { get; set; } = new();
