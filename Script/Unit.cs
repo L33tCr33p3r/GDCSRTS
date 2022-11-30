@@ -40,24 +40,46 @@ internal abstract partial class Unit : Node3D
 	// Called when on the right client.
 	private void RunAI()
 	{
-		EvaluateGoal();
+		_goal = EvaluateGoal();
 		PerformGoal();
 	}
 
 	// Evaluates Order queue to decide what the unit's current goal is.
-	private void EvaluateGoal()
+	private Order? EvaluateGoal()
 	{
-		if (_orders.Count != 0) 
+		while (true)
 		{
-			var currentOrder = _orders.Peek();
-			if (currentOrder.GetType() == typeof(MoveOrder)) // Checks if currentOrder is a MoveOrder
+			if (_orders.Count != 0) 
 			{
-				_goal = currentOrder; // Copies curentOrder to _goal, no extra logic is needed for MoveOrders
+				if (_orders.Peek().GetType() == typeof(MoveOrder)) // Checks if currentOrder is a MoveOrder
+				{
+					var currentMove = (MoveOrder)_orders.Peek();
+
+					if (true) // TODO: Check if there is something at the order's movetarget already
+					{
+						return currentMove; // Copies curentOrder to _goal if there is nothing at the movetarget
+					}
+					else if (true) // TODO: Check if the current unit is the thing at the MoveTarget
+					{
+						_orders.Dequeue();
+					}
+					else // TODO: Find where else to pathfind to
+					{
+						// Find the nearest unoccupied space the unit could move to. If
+						// the check to see if the next place is unoccupied says the unit
+						// is already there, it means you should remove the move order, as
+						// the unit has already gotten as close as it can. If it instead
+						// finds an unoccupied space first, check if _goal has a MoveOrder
+						// with a matching (or closely matching) MoveTarg. If it does,
+						// return _goal. If it doesn't, generate a full new MoveOrder and
+						// return that.
+					}
+				}
 			}
-		}
-		else
-		{
-			_goal = null;
+			else
+			{
+				return null;
+			}
 		}
 	}
 
