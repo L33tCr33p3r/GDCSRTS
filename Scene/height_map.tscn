@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://rsr4stqjuj4u"]
 
 [ext_resource type="Script" path="res://Script/HeightMap.cs" id="1_rlbwv"]
 
