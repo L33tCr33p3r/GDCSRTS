@@ -79,6 +79,7 @@ internal abstract partial class Unit : Node3D
 			{
 				return null;
 			}
+		}
 		
 	}
 
@@ -101,7 +102,7 @@ internal abstract partial class Unit : Node3D
 		var isAUnitNearPoint = false;
 		foreach (Unit unit in GetTree().GetNodesInGroup("Units"))
 		{
-			if (unit.AmINearPoint(checkPoint, tolerance)) isAUnitAtPoint = true;
+			if (unit.AmINearPoint(checkPoint, tolerance)) isAUnitNearPoint = true;
 		}
 		return isAUnitNearPoint;
 	}
