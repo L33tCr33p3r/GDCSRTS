@@ -3,4 +3,5 @@ internal abstract record Order
 {
 	// Properties of all Orders
 	public Guid OrderId { get; init; } = new();
+	public bool IsDeleted { get; init; } = false;
 }

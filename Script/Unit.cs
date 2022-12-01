@@ -19,8 +19,6 @@ internal abstract partial class Unit : Node3D
 	private Queue<Order> _orders = new();
 	private Order? _goal;
 	private FireStance _stance;
-	private Unit? _target;
-	private Vector2? _targetLastSeen;
 	private float _viewRange;
 
 	// Properties (ALL OF THESE ARE PUBLIC)
@@ -29,6 +27,7 @@ internal abstract partial class Unit : Node3D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		AddToGroup("Units");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -55,13 +54,13 @@ internal abstract partial class Unit : Node3D
 				{
 					var currentMove = (MoveOrder)_orders.Peek();
 
-					if (true) // TODO: Check if there is something at the order's movetarget already
+					if (!IsAUnitNearPoint(currentMove.MoveTarg, 1)) // Check if there is something at the order's movetarget already
 					{
 						return currentMove; // Copies curentOrder to _goal if there is nothing at the movetarget
 					}
-					else if (true) // TODO: Check if the current unit is the thing at the MoveTarget
+					else if (AmINearPoint(currentMove.MoveTarg, 1)) // Check if the current unit is the thing at the MoveTarget
 					{
-						_orders.Dequeue();
+						_orders.Dequeue(); // Remove the order if the current unit is the thing at the point
 					}
 					else // TODO: Find where else to pathfind to
 					{
@@ -80,7 +79,7 @@ internal abstract partial class Unit : Node3D
 			{
 				return null;
 			}
-		}
+		
 	}
 
 	// Tries to complete whatever the unit's current goal is. 
@@ -94,5 +93,22 @@ internal abstract partial class Unit : Node3D
 		{
 			
 		}
+	}
+
+	// Check if any unit is within a certain radius of a given point
+	private bool IsAUnitNearPoint(Vector3 checkPoint, double tolerance)
+	{
+		var isAUnitNearPoint = false;
+		foreach (Unit unit in GetTree().GetNodesInGroup("Units"))
+		{
+			if (unit.AmINearPoint(checkPoint, tolerance)) isAUnitAtPoint = true;
+		}
+		return isAUnitNearPoint;
+	}
+
+	// Check if the unit is within a certain radius of a given point
+	private bool AmINearPoint(Vector3 checkPoint, double tolerance)
+	{
+		return (GlobalPosition - checkPoint).Length() <= tolerance;
 	}
 }
