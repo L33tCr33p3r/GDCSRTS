@@ -50,7 +50,8 @@ internal abstract partial class Unit : Node3D
 		{
 			if (_orders.Count != 0) 
 			{
-				if (_orders.Peek().GetType() == typeof(MoveOrder)) // Checks if currentOrder is a MoveOrder
+				if (_orders.Peek().IsDeleted) _orders.Dequeue();
+				else if (_orders.Peek().GetType() == typeof(MoveOrder)) // Checks if currentOrder is a MoveOrder
 				{
 					var currentMove = (MoveOrder)_orders.Peek();
 
