@@ -1,33 +1,13 @@
 ﻿// Contains pathfinding Flowfields and their related methods 
 internal class FlowField
 {
-	// public Vector2[,]? Field { get; private set; }
-	// public Vector2i Target { get; init; }
-	// public HeightMap Terrain { get; init; }
-
-	// private int[,] _distanceField { get; set; }
-	// private int[,] _steepnessField { get; set; }
-
-	// public FlowField(HeightMap heightMap) 
-	// {
-	// 	Terrain = heightMap;
-	// }
-	
-	// public void GenerateFlowField(float steepnessWeight = 1)
-	// {
-
-	// }
-
-	// public void GenerateDistanceField()
-	// {
-
-	// }
-
-	public float?[,] DistanceField { get; private set; }
+    // Fields (ALL OF THESE ARE PRIVATE)
+    public float?[,] DistanceField { get; private set; }
 	private HeightMap _terrain { get; init; }
 	public Vector2i Target { get; init; }
 	public float MaxSlope { get; init; }
 
+	// Constructor
 	public FlowField(HeightMap heightMap, Vector2i target, float maxSlope)
 	{
 		_terrain = heightMap;
@@ -53,7 +33,7 @@ internal class FlowField
 		int j = samplePoint.y;
 
 		float? minCost = null;
-		Vector2i minPoint = new Vector2i(0, 0);
+		var minPoint = new Vector2i(0, 0);
 		foreach (int di in new int[] {-1, 0, 1})
 		{
 			foreach (int dj in new int[] {-1, 0, 1})
@@ -83,7 +63,7 @@ internal class FlowField
 	private void GenerateDistanceField()
 	{
 		DistanceField[Target.x, Target.y] = 0;
-		bool fieldChanged = false;
+		bool fieldChanged;
 		do 
 		{
 			fieldChanged = false;

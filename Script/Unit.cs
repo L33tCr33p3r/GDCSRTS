@@ -16,7 +16,7 @@ internal abstract partial class Unit : Node3D
 	// Fields (ALL OF THESE ARE PRIVATE)
 	private readonly Guid _id = Guid.NewGuid(); // To be used for syncing with clients
 	private int _health;
-	private Queue<Order> _orders = new();
+	private readonly Queue<Order> _orders = new();
 	private Order? _goal;
 	private FireStance _stance;
 	private float _viewRange;
@@ -101,9 +101,13 @@ internal abstract partial class Unit : Node3D
 	private bool IsAUnitNearPoint(Vector3 checkPoint, double tolerance)
 	{
 		var isAUnitNearPoint = false;
-		foreach (Unit unit in GetTree().GetNodesInGroup("Units"))
+		foreach (Node node in GetTree().GetNodesInGroup("Units"))
 		{
-			if (unit.AmINearPoint(checkPoint, tolerance)) isAUnitNearPoint = true;
+			if (typeof(Unit).IsAssignableFrom(node.GetType()))
+			{
+				var unit = (Unit)node;
+				if (unit.AmINearPoint(checkPoint, tolerance)) isAUnitNearPoint = true;
+			}
 		}
 		return isAUnitNearPoint;
 	}

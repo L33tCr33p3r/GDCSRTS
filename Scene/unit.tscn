@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://uthf4tbnx4jq"]
+[gd_scene load_steps=4 format=3 uid="uid://c3g4kpgovaqhp"]
 
 [ext_resource type="Script" path="res://Script/Unit.cs" id="1_j7fxo"]
 [ext_resource type="Script" path="res://Script/Turret.cs" id="2_wbb8w"]
-[ext_resource type="Script" path="res://Scene/Muzzle.cs" id="3_18syi"]
+[ext_resource type="Script" path="res://Script/Muzzle.cs" id="3_18syi"]
 
 [node name="Unit" type="Node3D" groups=["Units"]]
 script = ExtResource("1_j7fxo")
