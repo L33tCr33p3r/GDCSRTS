@@ -1,6 +1,4 @@
-﻿using Godot;
-
-// For orders where a unit targets a position on the ground, rather than a unit
+﻿// For orders where a unit targets a position on the ground, rather than a unit
 internal class PositionAttackOrder
 {
 	// Properties of a PositionAttackOrder

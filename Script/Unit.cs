@@ -1,5 +1,5 @@
 // Base class for all Units
-internal abstract partial class Unit : Node3D
+internal partial class Unit : Node3D
 {
 	public enum FireStance
 	{
@@ -48,7 +48,7 @@ internal abstract partial class Unit : Node3D
 	{
 		while (true)
 		{
-			if (_orders.Count != 0) 
+			if (_orders.Count != 0)
 			{
 				if (_orders.Peek().IsDeleted) _orders.Dequeue();
 				else if (_orders.Peek().GetType() == typeof(MoveOrder)) // Checks if currentOrder is a MoveOrder
@@ -81,7 +81,7 @@ internal abstract partial class Unit : Node3D
 				return null;
 			}
 		}
-		
+
 	}
 
 	// Tries to complete whatever the unit's current goal is. 
@@ -89,11 +89,11 @@ internal abstract partial class Unit : Node3D
 	{
 		if (_goal != null) // If the unit has a goal, tries to execute it.
 		{
-			
+
 		}
 		else // If the unit has no goal, decides what else to do
 		{
-			
+
 		}
 	}
 

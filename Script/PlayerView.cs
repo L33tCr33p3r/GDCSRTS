@@ -44,9 +44,9 @@ internal partial class PlayerView : Node3D
 		if (Input.IsActionPressed("pan")) 
 		{
 			Input.MouseMode = Input.MouseModeEnum.Captured;
-			if (e is InputEventMouseMotion)
+			if (e is InputEventMouseMotion motion)
 			{
-				_mouse_motion = -((InputEventMouseMotion) e).Relative;
+				_mouse_motion = -motion.Relative;
 			}
 		}
 		else

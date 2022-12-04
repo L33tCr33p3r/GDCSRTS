@@ -9,16 +9,18 @@ internal partial class HeightMap : Node
 
 	public override void _Ready()
 	{
-		generateData(0);
-		generateMesh();
+		GenerateData(0);
+		GenerateMesh();
 	}
 
-	private void generateData(int seed, float hscale = 0.5f, float vscale = 5.0f) {
+	private void GenerateData(int seed, float hscale = 0.5f, float vscale = 5.0f) {
 		Ground = new float[size, size];
 
-		FastNoiseLite noise = new();
-		noise.Seed = seed;
-		noise.FractalOctaves = 10;
+		var noise = new FastNoiseLite
+		{
+			Seed = seed,
+			FractalOctaves = 10
+		};
 		// TODO: proper noise settings
 
 		for (int x = 0; x < size; x++)
@@ -30,7 +32,7 @@ internal partial class HeightMap : Node
 		}
 	}
 
-	private void generateMesh(float hscale = 0.5f) 
+	private void GenerateMesh(float hscale = 0.5f) 
 	{
 		if (Ground == null)
 		{
@@ -39,10 +41,12 @@ internal partial class HeightMap : Node
 		}
 
 		// this gets us the vertices connected in the right way
-		var plane = new PlaneMesh();
-		plane.Size = new Vector2(size * hscale, size * hscale);
-		plane.SubdivideDepth = size - 2; // subtract 2 so that the nuber of vertices actually matches the number of sample points
-		plane.SubdivideWidth = size - 2;
+		var plane = new PlaneMesh
+		{
+			Size = new Vector2(size * hscale, size * hscale),
+			SubdivideDepth = size - 2, // subtract 2 so that the nuber of vertices actually matches the number of sample points
+			SubdivideWidth = size - 2
+		};
 
 		// convert the PlaneMesh into an ArrayMesh so that we can edit it
 		var plane_mesh = new ArrayMesh();

@@ -1,21 +1,21 @@
 ﻿// Contains pathfinding Flowfields and their related methods 
 internal class FlowField
 {
-    // Fields (ALL OF THESE ARE PRIVATE)
-    public float?[,] DistanceField { get; private set; }
-	private HeightMap _terrain { get; init; }
+	// Fields (ALL OF THESE ARE PRIVATE)
+	public float?[,] DistanceField { get; private set; }
+	private HeightMap Terrain { get; init; }
 	public Vector2i Target { get; init; }
 	public float MaxSlope { get; init; }
 
 	// Constructor
 	public FlowField(HeightMap heightMap, Vector2i target, float maxSlope)
 	{
-		_terrain = heightMap;
+		Terrain = heightMap;
 		Target = target;
 		MaxSlope = maxSlope;
 
 		// instantiate and fill the array with nulls:
-		DistanceField = new float?[_terrain.Ground.GetLength(0), _terrain.Ground.GetLength(1)];
+		DistanceField = new float?[Terrain.Ground.GetLength(0), Terrain.Ground.GetLength(1)];
 		for (int i = 0; i < DistanceField.GetLength(0); i++)
 		{
 			for (int j = 0; j < DistanceField.GetLength(1); j++)
@@ -48,7 +48,7 @@ internal class FlowField
 				if (DistanceField[iprime, jprime] != null)
 				{
 					float distance = Math.Abs(di) == Math.Abs(dj) ? 1 : Mathf.Sqrt(2);
-					float slope = (_terrain.Ground[iprime, jprime] - _terrain.Ground[i, j]) / distance;
+					float slope = (Terrain.Ground[iprime, jprime] - Terrain.Ground[i, j]) / distance;
 					if ((minCost == null || minCost > distance) && slope < MaxSlope)
 					{
 						minCost = distance;
@@ -90,7 +90,7 @@ internal class FlowField
 								if (DistanceField[iprime, jprime] != null)
 								{
 									float distance = Math.Abs(di) == Math.Abs(dj) ? 1 : Mathf.Sqrt(2); // gets the actual distance to the square rather than manhattan distance
-									float slope = (_terrain.Ground[iprime, jprime] - _terrain.Ground[i, j]) / distance;
+									float slope = (Terrain.Ground[iprime, jprime] - Terrain.Ground[i, j]) / distance;
 									if ((minCost == null || minCost > distance) && slope < MaxSlope)
 									{
 										minCost = distance;
