@@ -22,6 +22,6 @@ public partial class flow_field_navigator : Node3D
 
 		Vector2 move = Input.GetVector("ui_left", "ui_right", "ui_down", "ui_up");
 		Position += new Vector3(move.x, 0, move.y) * (float) delta;
-		Position += new Vector3(direction.x, 0, direction.y) * (float) delta * 0.1f;
+		Position += new Vector3(direction.x, 0, direction.y) * (float) delta;
 	}
 }

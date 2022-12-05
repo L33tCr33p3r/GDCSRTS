@@ -2,7 +2,7 @@
 internal partial class HeightMap : Node
 {
 	[Export]
-	public int size = 200;
+	public int size = 400;
 
 	public float[,]? Ground { get; protected set; } // TODO: actually set something in these variables during terrain generation
 	// public float[,] Water { get; protected set; }
@@ -11,11 +11,11 @@ internal partial class HeightMap : Node
 	public override void _EnterTree()
 	{
 		GenerateData(0);
-		field = new(this, new Vector2i(size / 2, size / 2), 0.1f); // DEBUG
+		field = new(this, new Vector2i(size / 2, size / 2), 0.2f); // DEBUG
 		GenerateMesh();
 	}
 
-	private void GenerateData(int seed, float hscale = 0.5f, float vscale = 5.0f) {
+	private void GenerateData(int seed, float hscale = 0.5f, float vscale = 15.0f) {
 		Ground = new float[size, size];
 
 		var noise = new FastNoiseLite
@@ -29,12 +29,12 @@ internal partial class HeightMap : Node
 		{
 			for (int y = 0; y < size; y++)
 			{
-				Ground[x, y] = MathF.Pow(noise.GetNoise2d(x / hscale, y / hscale), 1.0f) * vscale;
+				Ground[x, y] = MathF.Pow(noise.GetNoise2d(x / hscale, y / hscale), 2.0f) * vscale;
 			}
 		}
 	}
 
-	private void GenerateMesh(float hscale = 0.5f) 
+	private void GenerateMesh(float hscale = 1.0f) 
 	{
 		if (Ground == null)
 		{
@@ -46,6 +46,7 @@ internal partial class HeightMap : Node
 		var plane = new PlaneMesh
 		{
 			Size = new Vector2(size * hscale, size * hscale),
+			CenterOffset = new Vector3((size / 2) * hscale, 0, (size / 2) * hscale),
 			SubdivideDepth = size - 2, // subtract 2 so that the nuber of vertices actually matches the number of sample points
 			SubdivideWidth = size - 2
 		};
@@ -62,7 +63,7 @@ internal partial class HeightMap : Node
 		for (int i = 0; i < md.GetVertexCount(); i++)
 		{
 			Vector3 pos = md.GetVertex(i);
-			md.SetVertex(i, new Vector3(pos.x, Ground[i % size, i / size], pos.z));
+			md.SetVertex(i, new Vector3(i % size, Ground[i % size, i / size], i / size));
 
 			// DEBUG: flowfield based coloring
 			Color color = new Color(0, 0, 1);
