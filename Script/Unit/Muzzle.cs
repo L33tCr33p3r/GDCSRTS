@@ -17,7 +17,7 @@ internal partial class Muzzle : Node3D
 	}
 
 	// Tries to elevate the Muzzle towards target. 'delta' is the elapsed time since the previous frame.
-	// Returns true if it can sucessfully aim at the target.
+	// Returns true if it can sucessfully aim at the target, false otherwise.
 	public bool ElevateToTarget(Vector3 target, double delta)
 	{
 		var isAimed = true;

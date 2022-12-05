@@ -2,7 +2,7 @@
 internal partial class HeightMap : Node
 {
 	[Export]
-	public int size = 200;
+	public int size = 1000;
 
 	public float[,]? Ground { get; protected set; } // TODO: actually set something in these variables during terrain generation
 	// public float[,] Water { get; protected set; }

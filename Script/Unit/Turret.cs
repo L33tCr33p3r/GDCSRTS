@@ -16,7 +16,7 @@ internal partial class Turret : Node3D
 	}
 
 	// Tries to aim the turret toward the Vector3 given. 'delta' is the elapsed time since the previous frame.
-	// Returns true if it and all of it's muzzles can sucessfully aim at the target.
+	// Returns true if it and all of it's muzzles can sucessfully aim at the target, false otherwise.
 	public bool AimAtTarget(Vector3 target, double delta)
 	{
 		var isAimed = true;
@@ -24,7 +24,7 @@ internal partial class Turret : Node3D
 		var directionToTarget = GlobalPosition.DirectionTo(target);
 		var HorizontalAngleToTarget = Math.Atan2(directionToTarget.x, -directionToTarget.z);
 		
-		var rotationLimit = _rotationSpeed * delta;
+		var rotationSpeedLimit = _rotationSpeed * delta;
 		
 		double targetRotation;
 		if (_rotationLimit != null)
@@ -44,10 +44,10 @@ internal partial class Turret : Node3D
 		else targetRotation = HorizontalAngleToTarget - Rotation.y;
 
 		double amountToRotate;
-		if (Math.Abs(targetRotation) > rotationLimit)
+		if (Math.Abs(targetRotation) > rotationSpeedLimit)
 		{
-			if (targetRotation < 0) amountToRotate = rotationLimit;
-			else amountToRotate = -rotationLimit;
+			if (targetRotation < 0) amountToRotate = rotationSpeedLimit;
+			else amountToRotate = -rotationSpeedLimit;
 			isAimed = false;
 		}
 		else amountToRotate = targetRotation;
