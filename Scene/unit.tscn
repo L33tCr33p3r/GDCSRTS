@@ -7,8 +7,18 @@
 [node name="Unit" type="Node3D" groups=["Units"]]
 script = ExtResource("1_j7fxo")
 
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+
 [node name="Turret" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("2_wbb8w")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Turret"]
+size = Vector3(0.4, 0.4, 0.4)
 
 [node name="Muzzle" type="Node3D" parent="Turret"]
 script = ExtResource("3_18syi")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Turret/Muzzle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+size = Vector3(0.1, 0.1, 1)

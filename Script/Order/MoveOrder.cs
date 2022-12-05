@@ -1,6 +1,4 @@
-﻿using Godot;
-
-// For Orders where a unit is moving to a point in space
+﻿// For Orders where a unit is moving to a point in space
 internal record MoveOrder : Order
 {
 	// Properties of a MoveOrder
@@ -8,9 +6,9 @@ internal record MoveOrder : Order
 	public FlowField MoveFlowField { get; init; }
 
 	// Constructor
-	public MoveOrder(Vector3 moveTarg)
+	public MoveOrder(HeightMap heightMap, Vector3 moveTarg, float maxSlope)
 	{
 		MoveTarg = moveTarg;
-		MoveFlowField = new(); // TODO: This constructor should take the moveTarg as well
+		// MoveFlowField = new(heightMap, moveTarg, maxSlope); // TODO: This constructor needs moveTarg as a Vector2i...
 	}
 }
