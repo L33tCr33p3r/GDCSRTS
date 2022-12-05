@@ -55,11 +55,11 @@ internal partial class Unit : Node3D
 				{
 					var currentMove = (MoveOrder)_orders.Peek();
 
-					if (!IsAUnitNearPoint(currentMove.MoveTarg, 1)) // Check if there is something at the order's movetarget already
+					if (!IsAUnitNearPoint(currentMove.MoveTarget, 1)) // Check if there is something at the order's movetarget already
 					{
 						return currentMove; // Copies curentOrder to _goal if there is nothing at the movetarget
 					}
-					else if (AmINearPoint(currentMove.MoveTarg, 1)) // Check if the current unit is the thing at the MoveTarget
+					else if (AmINearPoint(currentMove.MoveTarget, 1)) // Check if the current unit is the thing at the MoveTarget
 					{
 						_orders.Dequeue(); // Remove the order if the current unit is the thing at the point
 					}
@@ -87,11 +87,7 @@ internal partial class Unit : Node3D
 	// Tries to complete whatever the unit's current goal is. 
 	private void PerformGoal()
 	{
-		if (_goal != null) // If the unit has a goal, tries to execute it.
-		{
-
-		}
-		else // If the unit has no goal, decides what else to do
+		if (_goal is MoveOrder order)
 		{
 
 		}

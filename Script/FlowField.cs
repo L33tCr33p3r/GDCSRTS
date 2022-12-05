@@ -1,7 +1,7 @@
 ﻿// Contains pathfinding Flowfields and their related methods 
 internal class FlowField
 {
-	// Fields (ALL OF THESE ARE PRIVATE)
+	// Properties (ALL OF THESE ARE PUBLIC)
 	public float?[,] DistanceField { get; private set; }
 	private HeightMap Terrain { get; init; }
 	public Vector2i Target { get; init; }
@@ -29,6 +29,7 @@ internal class FlowField
 
 	public Vector2i Sample(Vector2i samplePoint)
 	{
+		// TODO: make this interpolate the input and output vectors
 		int i = samplePoint.x;
 		int j = samplePoint.y;
 
