@@ -37,6 +37,15 @@ internal partial class PlayerView : Node3D
 		// camera.Basis *= rotation_basis;
 		
 		_mouse_motion = new Vector2(0, 0);
+
+		if (Input.IsActionPressed("zoom_in"))
+		{
+			GetNode<Camera3D>("Pivot/Camera").Translate(new Vector3(0, 0, -10) * (float)delta);
+		}
+		if (Input.IsActionPressed("zoom_out"))
+		{
+			GetNode<Camera3D>("Pivot/Camera").Translate(new Vector3(0, 0, 10) * (float)delta);
+		}
 	}
 
 	public override void _UnhandledInput(InputEvent e)

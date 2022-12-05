@@ -12,4 +12,4 @@ target_position = Vector3(0, -40, 0)
 [node name="Pivot" type="Node3D" parent="."]
 
 [node name="Camera" type="Camera3D" parent="Pivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000414252, -0.009076, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
