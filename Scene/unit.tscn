@@ -1,24 +1,37 @@
-[gd_scene load_steps=4 format=3 uid="uid://c3g4kpgovaqhp"]
+[gd_scene load_steps=8 format=3 uid="uid://bwod4accxp8ga"]
 
-[ext_resource type="Script" path="res://Script/Unit.cs" id="1_j7fxo"]
-[ext_resource type="Script" path="res://Script/Turret.cs" id="2_wbb8w"]
-[ext_resource type="Script" path="res://Script/Muzzle.cs" id="3_18syi"]
+[ext_resource type="Script" path="res://Script/Unit/Unit.cs" id="1_j7fxo"]
+[ext_resource type="Script" path="res://Script/Unit/TurretHardpoint.cs" id="2_ordao"]
+[ext_resource type="Script" path="res://Script/Unit/Turret.cs" id="2_wbb8w"]
+[ext_resource type="Script" path="res://Script/Unit/Muzzle.cs" id="3_18syi"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_6526d"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_hcyex"]
+size = Vector3(0.4, 0.4, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_p23uh"]
+size = Vector3(0.1, 0.1, 1)
 
 [node name="Unit" type="Node3D" groups=["Units"]]
 script = ExtResource("1_j7fxo")
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_6526d")
 
-[node name="Turret" type="Node3D" parent="."]
+[node name="TurretHardpoint" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("2_ordao")
+
+[node name="Turret" type="Node3D" parent="TurretHardpoint"]
 script = ExtResource("2_wbb8w")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Turret"]
-size = Vector3(0.4, 0.4, 0.4)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TurretHardpoint/Turret"]
+mesh = SubResource("BoxMesh_hcyex")
 
-[node name="Muzzle" type="Node3D" parent="Turret"]
+[node name="Muzzle" type="Node3D" parent="TurretHardpoint/Turret"]
 script = ExtResource("3_18syi")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Turret/Muzzle"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TurretHardpoint/Turret/Muzzle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
-size = Vector3(0.1, 0.1, 1)
+mesh = SubResource("BoxMesh_p23uh")
