@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjs7td6jth0te"]
+
+[ext_resource type="Script" path="res://Script/flow_field_navigator.cs" id="1_eq82b"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_nkbt4"]
+top_radius = 0.0
+bottom_radius = 0.05
+height = 0.5
+radial_segments = 8
+
+[node name="FlowFieldNavigator" type="Node3D"]
+script = ExtResource("1_eq82b")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.2)
+mesh = SubResource("CylinderMesh_nkbt4")

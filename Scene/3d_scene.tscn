@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://b7w4ykum7hon5"]
+[gd_scene load_steps=8 format=3 uid="uid://b7w4ykum7hon5"]
 
 [ext_resource type="PackedScene" uid="uid://rsr4stqjuj4u" path="res://Scene/height_map.tscn" id="1_31ips"]
+[ext_resource type="PackedScene" path="res://Scene/level.tscn" id="1_3856h"]
 [ext_resource type="PackedScene" uid="uid://djnqk1ydbx6q2" path="res://Scene/player_view.tscn" id="2_a6eb6"]
+[ext_resource type="PackedScene" uid="uid://bjs7td6jth0te" path="res://Scene/flow_field_navigator.tscn" id="2_t8ukk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8lkj8"]
 sky_top_color = Color(0.166693, 0.278151, 0.419402, 1)
@@ -21,6 +23,12 @@ tonemap_white = 16.0
 
 [node name="3D Scene" type="Node3D"]
 
+[node name="Level" parent="." instance=ExtResource("1_3856h")]
+
+[node name="FlowFieldNavigator" parent="Level" instance=ExtResource("2_t8ukk")]
+
+[node name="HeightMap" parent="Level" instance=ExtResource("1_31ips")]
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_53k4e")
 
@@ -29,7 +37,5 @@ transform = Transform3D(-0.707107, -0.353553, 0.612372, 2.98023e-08, 0.866025, 0
 light_angular_distance = 0.5
 shadow_enabled = true
 directional_shadow_max_distance = 20.0
-
-[node name="HeightMap" parent="." instance=ExtResource("1_31ips")]
 
 [node name="PlayerView" parent="." instance=ExtResource("2_a6eb6")]

@@ -2,18 +2,20 @@
 internal partial class HeightMap : Node
 {
 	[Export]
-	public int size = 1000;
+	public int size = 200;
 
 	public float[,]? Ground { get; protected set; } // TODO: actually set something in these variables during terrain generation
 	// public float[,] Water { get; protected set; }
+	private FlowField field; // DEBUG
 
-	public override void _Ready()
+	public override void _EnterTree()
 	{
 		generateData(0);
+		field = new(this, new Vector2i(size / 2, size / 2), 0.1f); // DEBUG
 		generateMesh();
 	}
 
-	private void generateData(int seed, float hscale = 0.5f, float vscale = 5.0f) {
+	public void generateData(int seed, float hscale = 0.5f, float vscale = 5.0f) {
 		Ground = new float[size, size];
 
 		FastNoiseLite noise = new();
@@ -25,7 +27,7 @@ internal partial class HeightMap : Node
 		{
 			for (int y = 0; y < size; y++)
 			{
-				Ground[x, y] = MathF.Pow(noise.GetNoise2d(x / hscale, y / hscale), 2.0f) * vscale;
+				Ground[x, y] = MathF.Pow(noise.GetNoise2d(x / hscale, y / hscale), 1.0f) * vscale;
 			}
 		}
 	}
@@ -57,6 +59,29 @@ internal partial class HeightMap : Node
 		{
 			Vector3 pos = md.GetVertex(i);
 			md.SetVertex(i, new Vector3(pos.x, Ground[i % size, i / size], pos.z));
+
+			// DEBUG: flowfield based coloring
+			Color color = new Color(0, 0, 1);
+
+			var distance = field.DistanceField[i % size, i / size];
+			if (distance == null)
+			{
+				color = new(1, 0.2f, 0.2f);
+			}
+			else
+			{
+				color = new((float)distance * 0.01f, (float)distance * 0.01f, (float)distance * 0.01f);
+			}
+
+			// Vector2 direction = field.Sample(new Vector2i(i % size, i / size));
+			// if (direction != new Vector2(0, 0)) 
+			// {
+			// 	GD.Print((direction.x * 0.5f) + 0.5f, " ", (direction.y * 0.5f) + 0.5);
+			// 	color = new Color((direction.x * 0.5f) + 0.5f, (direction.y * 0.5f) + 0.5f, 0);
+			// }
+			// END DEBUG
+
+			md.SetVertexColor(i, color);
 		}
 
 		var final_mesh = new ArrayMesh();
