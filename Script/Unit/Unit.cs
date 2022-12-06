@@ -66,7 +66,7 @@ internal partial class Unit : Node3D
 				{
 					if (AmINearPoint(positionAttack.AttackTarget, _firingRange)) // checks if the unit is within range
 					{
-
+						return positionAttack;
 					}
 				}
 			}
