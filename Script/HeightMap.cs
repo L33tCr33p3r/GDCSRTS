@@ -6,7 +6,7 @@ internal partial class HeightMap : Node
 
 	public float[,]? Ground { get; protected set; } // TODO: actually set something in these variables during terrain generation
 	// public float[,] Water { get; protected set; }
-	private FlowField field; // DEBUG
+	public FlowField field; // DEBUG
 
 	public override void _EnterTree()
 	{
@@ -21,7 +21,7 @@ internal partial class HeightMap : Node
 		var noise = new FastNoiseLite
 		{
 			Seed = seed,
-			FractalOctaves = 10
+			FractalOctaves = 6
 		};
 		// TODO: proper noise settings
 
@@ -34,7 +34,7 @@ internal partial class HeightMap : Node
 		}
 	}
 
-	private void GenerateMesh(float hscale = 1.0f) 
+	private void GenerateMesh() 
 	{
 		if (Ground == null)
 		{
@@ -45,8 +45,7 @@ internal partial class HeightMap : Node
 		// this gets us the vertices connected in the right way
 		var plane = new PlaneMesh
 		{
-			Size = new Vector2(size * hscale, size * hscale),
-			CenterOffset = new Vector3((size / 2) * hscale, 0, (size / 2) * hscale),
+			Size = new Vector2(1, 1),
 			SubdivideDepth = size - 2, // subtract 2 so that the nuber of vertices actually matches the number of sample points
 			SubdivideWidth = size - 2
 		};
@@ -68,22 +67,21 @@ internal partial class HeightMap : Node
 			// DEBUG: flowfield based coloring
 			Color color = new Color(0, 0, 1);
 
-			var distance = field.DistanceField[i % size, i / size];
-			if (distance == null)
-			{
-				color = new(1, 0.2f, 0.2f);
-			}
-			else
-			{
-				color = new((float)distance * 0.01f, (float)distance * 0.01f, (float)distance * 0.01f);
-			}
-
-			// Vector2 direction = field.Sample(new Vector2i(i % size, i / size));
-			// if (direction != new Vector2(0, 0)) 
+			// var distance = field.DistanceField[i % size, i / size];
+			// if (distance == null)
 			// {
-			// 	GD.Print((direction.x * 0.5f) + 0.5f, " ", (direction.y * 0.5f) + 0.5);
-			// 	color = new Color((direction.x * 0.5f) + 0.5f, (direction.y * 0.5f) + 0.5f, 0);
+			// 	color = new(1, 0.2f, 0.2f);
 			// }
+			// else
+			// {
+			// 	color = new((float)distance * 0.003f, (float)distance * 0.003f, (float)distance * 0.003f);
+			// }
+
+			Vector2 direction = field.Sample(new Vector2i(i % size, i / size));
+			if (direction != new Vector2(0, 0)) 
+			{
+				color = new Color((direction.x * 0.5f) + 0.5f, (direction.y * 0.5f) + 0.5f, 0);
+			}
 			// END DEBUG
 
 			md.SetVertexColor(i, color);
