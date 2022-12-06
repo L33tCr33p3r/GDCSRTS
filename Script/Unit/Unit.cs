@@ -1,18 +1,6 @@
 // Base class for all Units
 internal partial class Unit : Node3D
 {
-	public enum FireStance
-	{
-		/// <summary> Run away from enemies </summary>
-		Flee,
-		/// <summary> Do not attack enemies </summary>
-		Hold,
-		/// <summary> Attack enemies that attacked first </summary>
-		Return,
-		/// <summary> Attack any spotted enemies </summary>
-		AtWill
-	}
-
 	// Fields (ALL OF THESE ARE PRIVATE)
 	private readonly Guid _id = Guid.NewGuid(); // To be used for syncing with clients
 	private int _health;
@@ -20,6 +8,7 @@ internal partial class Unit : Node3D
 	private Order? _goal;
 	private FireStance _stance;
 	private float _viewRange;
+	private float _firingRange;
 
 	// Properties (ALL OF THESE ARE PUBLIC)
 	public Guid Id { get { return _id; } }
@@ -33,14 +22,14 @@ internal partial class Unit : Node3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		RunAI();
+		RunAI(delta);
 	}
 
 	// Called when on the right client.
-	private void RunAI()
+	private void RunAI(double delta)
 	{
 		_goal = EvaluateGoal();
-		PerformGoal();
+		PerformGoal(delta);
 	}
 
 	// Evaluates Order queue to decide what the unit's current goal is.
@@ -51,15 +40,13 @@ internal partial class Unit : Node3D
 			if (_orders.Count != 0)
 			{
 				if (_orders.Peek().IsDeleted) _orders.Dequeue();
-				else if (_orders.Peek().GetType() == typeof(MoveOrder)) // Checks if currentOrder is a MoveOrder
+				else if (_orders.Peek() is MoveOrder move) // Checks if currentOrder is a MoveOrder
 				{
-					var currentMove = (MoveOrder)_orders.Peek();
-
-					if (!IsAUnitNearPoint(currentMove.MoveTarget, 1)) // Check if there is something at the order's movetarget already
+					if (!IsAUnitNearPoint(move.MoveTarget, 1)) // Check if there is something at the order's movetarget already
 					{
-						return currentMove; // Copies curentOrder to _goal if there is nothing at the movetarget
+						return move; // Copies curentOrder to _goal if there is nothing at the movetarget
 					}
-					else if (AmINearPoint(currentMove.MoveTarget, 1)) // Check if the current unit is the thing at the MoveTarget
+					else if (AmINearPoint(move.MoveTarget, 1)) // Check if the current unit is the thing at the MoveTarget
 					{
 						_orders.Dequeue(); // Remove the order if the current unit is the thing at the point
 					}
@@ -75,6 +62,13 @@ internal partial class Unit : Node3D
 						// return that.
 					}
 				}
+				else if (_orders.Peek() is PositionAttackOrder positionAttack)
+				{
+					if (AmINearPoint(positionAttack.AttackTarget, _firingRange)) // checks if the unit is within range
+					{
+
+					}
+				}
 			}
 			else
 			{
@@ -85,10 +79,23 @@ internal partial class Unit : Node3D
 	}
 
 	// Tries to complete whatever the unit's current goal is. 
-	private void PerformGoal()
+	private void PerformGoal(double delta)
 	{
-		if (_goal is MoveOrder order)
+		if (_goal is MoveOrder move)
 		{
+
+		}
+		else if (_goal is PositionAttackOrder positionAttack)
+		{
+			var aimed = true;
+
+			foreach (Node child in GetChildren())
+			{
+				if (child is TurretHardpoint turretHardpoint)
+				{
+					if (!turretHardpoint.Aim(positionAttack.AttackTarget, delta)) aimed = false;
+				}
+			}
 
 		}
 	}
