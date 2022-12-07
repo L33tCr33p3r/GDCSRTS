@@ -27,21 +27,21 @@ internal class FlowField
 		GenerateDistanceField();
 	}
 
-	public Vector2i Sample(Vector2i samplePoint) // TODO: fix random spots of null
+	public Vector2 Sample(Vector2i samplePoint) // TODO: fix random spots of null
 	{
 		// TODO: make this interpolate the input and output vectors
 		int i = samplePoint.x;
 		int j = samplePoint.y;
 
 		float? minCost = null;
-		var minPoint = new Vector2i(0, 0);
+		var minPoint = new Vector2(0, 0);
 		foreach (int di in new int[] {-1, 0, 1})
 		{
 			foreach (int dj in new int[] {-1, 0, 1})
 			{
 				int iprime = i + di;
 				int jprime = j + dj;
-				if (iprime < 0 || jprime < 0 || iprime >= DistanceField.GetLength(0) || jprime >= DistanceField.GetLength(1))
+				if ((di == 0 && dj == 0) || iprime < 0 || jprime < 0 || iprime >= DistanceField.GetLength(0) || jprime >= DistanceField.GetLength(1))
 				{
 					continue;
 				}
@@ -50,10 +50,10 @@ internal class FlowField
 					float sampled = (float)DistanceField[iprime, jprime]!;
 					float distance = Math.Abs(di) != Math.Abs(dj) ? 1 : Mathf.Sqrt(2);
 					float slope = (Terrain.Ground[iprime, jprime] - Terrain.Ground[i, j]) / distance;
-					if ((minCost == null || sampled < minCost) && slope < MaxSlope)
+					if ((minCost == null || sampled <= minCost) && slope < MaxSlope)
 					{
 						minCost = sampled;
-						minPoint = new Vector2i(di, dj);
+						minPoint = new Vector2(di, dj);
 					}
 				}
 			}
