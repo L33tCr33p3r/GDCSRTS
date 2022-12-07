@@ -74,7 +74,7 @@ internal partial class HeightMap : Node
 			// }
 			// else
 			// {
-			// 	color = new((float)distance * 0.003f, (float)distance * 0.003f, (float)distance * 0.003f);
+			// 	color = new((float)distance * 0.1f % 1, (float)distance * 0.1f % 1, (float)distance * 0.1f % 1);
 			// }
 
 			Vector2 direction = field.Sample(new Vector2i(i % size, i / size));
@@ -82,9 +82,9 @@ internal partial class HeightMap : Node
 			{
 				color = new Color((direction.x * 0.5f) + 0.5f, (direction.y * 0.5f) + 0.5f, 0);
 			}
-			// END DEBUG
 
 			md.SetVertexColor(i, color);
+			// END DEBUG
 		}
 
 		var final_mesh = new ArrayMesh();
