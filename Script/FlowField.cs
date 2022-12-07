@@ -31,7 +31,7 @@ internal class FlowField
 		int j = samplePoint.y;
 
 		float? minCost = null;
-		var minPoint = new Vector2(0, 0);
+		var minPoint = new Vector2i(0, 0);
 		foreach (int di in new int[] {-1, 0, 1})
 		{
 			foreach (int dj in new int[] { -1, 0, 1 })
@@ -46,11 +46,11 @@ internal class FlowField
 				{
 					float sampled = (float)DistanceField[iprime, jprime]!;
 					float distance = Math.Abs(di) != Math.Abs(dj) ? 1 : Mathf.Sqrt(2);
-					float slope = (Terrain.Ground[iprime, jprime] - Terrain.Ground[i, j]) / distance;
-					if ((minCost == null || sampled <= minCost) && slope < MaxSlope)
+					float slope = (heightMap.Ground![iprime, jprime] - heightMap.Ground[i, j]) / distance;
+					if ((minCost == null || sampled <= minCost) && slope < maxSlope)
 					{
 						minCost = sampled;
-						minPoint = new Vector2(di, dj);
+						minPoint = new Vector2i(di, dj);
 					}
 				}
 			}
