@@ -3,10 +3,12 @@ internal record MoveOrder : Order
 {
 	// Properties of a MoveOrder
 	public FlowField MoveFlowField { get; init; }
+	public Vector2 MoveTarget { get; init; }
 
 	// Constructor
 	public MoveOrder(HeightMap heightMap, Vector2 moveTarget, float maxSlope)
 	{
+		MoveTarget = moveTarget;
 		MoveFlowField = new FlowField(heightMap, (Vector2i)moveTarget, maxSlope);
 	}
 }
