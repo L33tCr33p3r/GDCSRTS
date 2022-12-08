@@ -24,7 +24,7 @@ internal class FlowField
 		GenerateVectorPath(heightMap, targetPosition, startPosition, maxSlope);
 	}
 
-	public Vector2i Sample(HeightMap heightMap, Vector2i samplePoint, float maxSlope) // TODO: fix random spots of null
+	public Vector2i Sample(HeightMap heightMap, Vector2i samplePoint, float maxSlope)
 	{
 		// TODO: make this interpolate the input and output vectors
 		int i = samplePoint.x;
@@ -45,7 +45,7 @@ internal class FlowField
 				if (DistanceField[iprime, jprime] != null)
 				{
 					float sampled = (float)DistanceField[iprime, jprime]!;
-					float distance = Math.Abs(di) != Math.Abs(dj) ? 1 : Mathf.Sqrt(2);
+					float distance = Math.Abs(di) != Math.Abs(dj) ? 1 : (float) Math.Sqrt(2);
 					float slope = (heightMap.Ground![iprime, jprime] - heightMap.Ground[i, j]) / distance;
 					if ((minCost == null || sampled <= minCost) && slope < maxSlope)
 					{
@@ -57,8 +57,6 @@ internal class FlowField
 		}
 		return minPoint;
 	}
-
-
 
 	/// <summary>
 	/// Generates the distance field that constistutes the actual flowfield
@@ -129,11 +127,79 @@ internal class FlowField
 	/// <summary>
 	/// Generates the final path to be followed by the unit from the DistanceField and NodePath
 	/// </summary>
+	/// <param name="heightMap"></param>
+	/// <param name="targetPosition"></param>
+	/// <param name="startPosition"></param>
+	/// <param name="maxSlope"></param>
 	private void GenerateVectorPath(HeightMap heightMap, Vector2 targetPosition, Vector2 startPosition, float maxSlope)
 	{
 		var currentVectorStart = startPosition;
 		var currentVectorEnd = targetPosition;
 		
 
+	}
+	
+	/// <summary>
+	/// Checks if the path from startPos to endPos is valid
+	/// </summary>
+	/// <param name="heightMap"></param>
+	/// <param name="startPos"></param>
+	/// <param name="endPos"></param>
+	/// <param name="maxSlope"></param>
+	/// <returns></returns>
+	private bool IsPathAllowed(HeightMap heightMap, Vector2 startPos, Vector2 endPos, float maxSlope)
+	{
+		var x1 = (int) startPos.x;
+		var x2 = (int)endPos.x;
+
+		var y1 = (int) startPos.y;
+		var y2 = (int) endPos.y;
+
+		var steep = Math.Abs(y2 - y1) > Math.Abs(x2 - x1);
+
+		if (steep)
+		{
+			(x1, x2) = (x2, x1);
+			(y1, y2) = (y2, y1);
+		}
+		if (x1 > x2)
+		{
+			(x1, y2) = (y2, x1);
+			(y1, x2) = (x2, y1);
+		}
+
+		int dx = x2 - x1;
+		int dy = Math.Abs(y2 - y1);
+		int error = dx / 2;
+		int ystep = (y1 < y2) ? 1 : -1;
+		int y = y1;
+
+		var points = new List<Vector2i>();
+		for (int x = x1; x <= x2; x++)
+		{
+			points.Add(new Vector2i((steep ? y : x), (steep ? x : y)));
+			error -= dy;
+			if (error < 0)
+			{
+				y += ystep;
+				error += dx;
+			}
+		}
+
+		for (int i = 0; i < points.Count - 1; i++)
+		{
+
+			var current = points[i];
+			var next = points[i + 1];
+
+			if (DistanceField[current.x, current.y] is null) return false;
+
+			float distance = Math.Abs(current.x - next.x) != Math.Abs(current.y - next.y) ? 1 : (float) Math.Sqrt(2);
+			float slope = (heightMap.Ground![next.x, next.y] - heightMap.Ground[current.x, current.y]) / distance;
+
+			if (slope > maxSlope) return false;
+		}
+
+		return true;
 	}
 }
