@@ -6,9 +6,9 @@ internal record MoveOrder : Order
 	public Vector2 MoveTarget { get; init; }
 
 	// Constructor
-	public MoveOrder(HeightMap heightMap, Vector2 moveTarget, float maxSlope)
+	public MoveOrder(HeightMap heightMap, Vector2 moveTarget, Vector2 currentPosition, float maxSlope)
 	{
 		MoveTarget = moveTarget;
-		MoveFlowField = new FlowField(heightMap, (Vector2i)moveTarget, maxSlope);
+		MoveFlowField = new FlowField(heightMap, moveTarget, currentPosition, maxSlope);
 	}
 }
