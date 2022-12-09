@@ -1,5 +1,4 @@
-﻿using System.Transactions;
-/// <summary>
+﻿/// <summary>
 /// Contains pathfinding Flowfields and their related methods 
 /// </summary>
 internal class FlowField
