@@ -1,4 +1,5 @@
-﻿/// <summary>
+﻿using System.Transactions;
+/// <summary>
 /// Contains pathfinding Flowfields and their related methods 
 /// </summary>
 internal class FlowField
@@ -32,7 +33,14 @@ internal class FlowField
 		GenerateVectorPath(heightMap, targetPosition, startPosition, maxSlope);
 	}
 
-	public Vector2i Sample(HeightMap heightMap, Vector2i samplePoint, float maxSlope)
+	/// <summary>
+	/// returns the offset to the next grid square on the flow field, given the heightmap, gridpoint to sample, and max traversible slope
+	/// </summary>
+	/// <param name="heightMap"></param>
+	/// <param name="samplePoint"></param>
+	/// <param name="maxSlope"></param>
+	/// <returns></returns>
+	public Vector2i FlowPathSample(HeightMap heightMap, Vector2i samplePoint, float maxSlope)
 	{
 		// TODO: make this interpolate the input and output vectors
 		int i = samplePoint.x;
@@ -133,7 +141,7 @@ internal class FlowField
 		FlowPath.Add(currentNode);
 		while (DistanceField[currentNode.x, currentNode.y] != 0)
 		{
-			currentNode += Sample(heightMap, startPoint, maxSlope);
+			currentNode += FlowPathSample(heightMap, startPoint, maxSlope);
 			FlowPath.Add(currentNode);
 		}
 	}
@@ -236,12 +244,65 @@ internal class FlowField
 		return true;
 	}
 
-	public Vector2 VectorPathSample(Vector2 unitPosition, float unitSpeed)
+	/// <summary>
+	/// Returns how much you should move that frame to follow the path, given your position, speed, and delta since previus frame
+	/// </summary>
+	/// <param name="unitPosition"></param>
+	/// <param name="unitSpeed"></param>
+	/// <param name="delta"></param>
+	/// <returns></returns>
+	public Vector2 VectorPathSample(Vector2 unitPosition, float unitSpeed, double delta)
 	{
-		
+		int? targetIndex = null;
+		float? closestDistance = null;
+
+		for (int i = 0; i < VectorPath.Count - 1; i++)
+		{
+			var currentDistance = DistanceFromLine(VectorPath[i], VectorPath[i + 1], unitPosition);
+
+			targetIndex ??= i + 1;
+			closestDistance ??= currentDistance;
+
+			if (closestDistance > currentDistance)
+			{
+				targetIndex = i + 1;
+				closestDistance = currentDistance;
+			}
+		}
+
+		Vector2 finalMove = Vector2.Zero;
+		var currentTarget = VectorPath[(int) targetIndex!];
+		var currentPosition = unitPosition;
+		var unitMovementRemaining = unitSpeed * delta;
+
+		while (targetIndex < VectorPath.Count)
+		{
+			if (currentPosition.DistanceTo(currentTarget) >= unitMovementRemaining)
+			{
+				finalMove += (currentTarget - currentPosition).Normalized() * (float) unitMovementRemaining;
+				break;
+			}
+			else
+			{
+				finalMove += currentTarget - currentPosition;
+				unitMovementRemaining -= (currentTarget - currentPosition).Length();
+				targetIndex++;
+				currentPosition = currentTarget;
+				currentTarget = VectorPath[(int)targetIndex!];
+			}
+		}
+
+		return finalMove;
 	}
 
-	public float distancefromline(Vector2 start, Vector2 end, Vector2 point)
+	/// <summary>
+	/// Returns point's distance from the line defined by the positions of it's endpoints
+	/// </summary>
+	/// <param name="start"></param>
+	/// <param name="end"></param>
+	/// <param name="point"></param>
+	/// <returns></returns>
+	private static float DistanceFromLine(Vector2 start, Vector2 end, Vector2 point)
 	{
 		// get distance betweeen endpoints
 		float factor = ((point - start).Dot(end - start)) / (end - start).Length();
