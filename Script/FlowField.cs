@@ -244,7 +244,7 @@ internal class FlowField
 	public float distancefromline(Vector2 start, Vector2 end, Vector2 point)
 	{
 		// get distance betweeen endpoints
-		float factor = ((point - start).Dot(end - start)) / (end - start).Length();
+		float factor = ((point - start).Dot(end - start)) / (end - start).LengthSquared();
 		Vector2 closestpoint = start.Lerp(end, factor);
 		return (point - closestpoint).Length();
 	}
