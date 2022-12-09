@@ -11,7 +11,7 @@ internal partial class HeightMap : Node
 	public override void _EnterTree()
 	{
 		GenerateData(0);
-		field = new(this, new Vector2i(size / 2, size / 2), 0.2f); // DEBUG
+		field = new(this, new Vector2i(size / 2, size / 2), Vector2.Zero, 0.2f); // DEBUG
 		GenerateMesh();
 	}
 
@@ -77,7 +77,7 @@ internal partial class HeightMap : Node
 			// 	color = new((float)distance * 0.1f % 1, (float)distance * 0.1f % 1, (float)distance * 0.1f % 1);
 			// }
 
-			Vector2 direction = field.Sample(new Vector2i(i % size, i / size));
+			Vector2 direction = field.Sample(this, new Vector2i(i % size, i / size), 0.2f);
 			if (direction != new Vector2(0, 0)) 
 			{
 				color = new Color((direction.x * 0.5f) + 0.5f, (direction.y * 0.5f) + 0.5f, 0);

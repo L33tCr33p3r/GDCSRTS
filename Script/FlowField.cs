@@ -1,12 +1,20 @@
-﻿// Contains pathfinding Flowfields and their related methods 
+﻿/// <summary>
+/// Contains pathfinding Flowfields and their related methods 
+/// </summary>
 internal class FlowField
 {
 	// Properties (ALL OF THESE ARE PUBLIC)
 	public float?[,] DistanceField { get; private set; }
-	public List<Vector2i> NodePath { get; private set; } = new();
+	public List<Vector2i> FlowPath { get; private set; } = new();
 	public List<Vector2> VectorPath { get; private set; } = new();
 
-	// Constructor
+	/// <summary>
+	/// Constructor
+	/// </summary>
+	/// <param name="heightMap"></param>
+	/// <param name="targetPosition"></param>
+	/// <param name="startPosition"></param>
+	/// <param name="maxSlope"></param>
 	public FlowField(HeightMap heightMap, Vector2 targetPosition, Vector2 startPosition, float maxSlope)
 	{
 		// instantiate and fill the array with nulls:
@@ -20,7 +28,7 @@ internal class FlowField
 		}
 
 		GenerateDistanceField(heightMap, (Vector2i) targetPosition, maxSlope);
-		GenerateNodePath(heightMap, (Vector2i) startPosition, maxSlope);
+		GenerateFlowPath(heightMap, (Vector2i) startPosition, maxSlope);
 		GenerateVectorPath(heightMap, targetPosition, startPosition, maxSlope);
 	}
 
@@ -61,6 +69,9 @@ internal class FlowField
 	/// <summary>
 	/// Generates the distance field that constistutes the actual flowfield
 	/// </summary>
+	/// <param name="heightMap"></param>
+	/// <param name="targetPoint"></param>
+	/// <param name="MaxSlope"></param>
 	private void GenerateDistanceField(HeightMap heightMap, Vector2i targetPoint, float MaxSlope)
 	{
 		DistanceField[targetPoint.x, targetPoint.y] = 0;
@@ -113,14 +124,17 @@ internal class FlowField
 	/// <summary>
 	/// Generates the node path from the unit's initial position to the path's end
 	/// </summary>
-	private void GenerateNodePath(HeightMap heightMap, Vector2i startPoint, float maxSlope)
+	/// <param name="heightMap"></param>
+	/// <param name="startPoint"></param>
+	/// <param name="maxSlope"></param>
+	private void GenerateFlowPath(HeightMap heightMap, Vector2i startPoint, float maxSlope)
 	{
 		var currentNode = startPoint;
-		NodePath.Add(currentNode);
+		FlowPath.Add(currentNode);
 		while (DistanceField[currentNode.x, currentNode.y] != 0)
 		{
 			currentNode += Sample(heightMap, startPoint, maxSlope);
-			NodePath.Add(currentNode);
+			FlowPath.Add(currentNode);
 		}
 	}
 
@@ -135,8 +149,27 @@ internal class FlowField
 	{
 		var currentVectorStart = startPosition;
 		var currentVectorEnd = targetPosition;
-		
 
+		var currentFlowPathIndex = FlowPath.Count - 1;
+
+		VectorPath.Add(currentVectorStart);
+
+		while (currentVectorStart != currentVectorEnd)
+		{
+			if (IsPathAllowed(heightMap, currentVectorStart, currentVectorEnd, maxSlope))
+			{
+				VectorPath.Add(currentVectorEnd);
+
+				currentVectorStart = currentVectorEnd;
+				currentVectorEnd = targetPosition;
+				currentFlowPathIndex = FlowPath.Count - 1;
+			}
+			else
+			{
+				currentVectorEnd = FlowPath[currentFlowPathIndex];
+				currentFlowPathIndex--;
+			}
+		}
 	}
 	
 	/// <summary>
@@ -201,5 +234,18 @@ internal class FlowField
 		}
 
 		return true;
+	}
+
+	public Vector2 VectorPathSample(Vector2 unitPosition, float unitSpeed)
+	{
+		
+	}
+
+	public float distancefromline(Vector2 start, Vector2 end, Vector2 point)
+	{
+		// get distance betweeen endpoints
+		float factor = ((point - start).Dot(end - start)) / (end - start).Length();
+		Vector2 closestpoint = start.Lerp(end, factor);
+		return (point - closestpoint).Length();
 	}
 }

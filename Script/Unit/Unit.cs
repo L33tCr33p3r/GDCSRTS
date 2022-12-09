@@ -42,11 +42,11 @@ internal partial class Unit : Node3D
 				if (_orders.Peek().IsDeleted) _orders.Dequeue();
 				else if (_orders.Peek() is MoveOrder move) // Checks if currentOrder is a MoveOrder
 				{
-					if (!IsAUnitNearPoint(move.MoveTarget, 1)) // Check if there is something at the order's movetarget already
+					if (!IsAUnitNearPoint(new Vector3(move.MoveTarget.x, GetNode<HeightMap>("../HeightMap").Ground![(int)move.MoveTarget.x, (int)move.MoveTarget.y], move.MoveTarget.y), 1)) // Check if there is something at the order's movetarget already
 					{
 						return move; // Copies curentOrder to _goal if there is nothing at the movetarget
 					}
-					else if (AmINearPoint(move.MoveTarget, 1)) // Check if the current unit is the thing at the MoveTarget
+					else if (AmINearPoint(new Vector3(move.MoveTarget.x, GetNode<HeightMap>("../HeightMap").Ground![(int)move.MoveTarget.x, (int)move.MoveTarget.y], move.MoveTarget.y), 1)) // Check if the current unit is the thing at the MoveTarget
 					{
 						_orders.Dequeue(); // Remove the order if the current unit is the thing at the point
 					}
