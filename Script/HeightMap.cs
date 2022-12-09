@@ -80,7 +80,8 @@ internal partial class HeightMap : Node
 			Vector2 direction = field.FlowPathSample(this, new Vector2i(i % size, i / size), 0.2f);
 			if (direction != new Vector2(0, 0)) 
 			{
-				color = new Color((direction.x * 0.5f) + 0.5f, (direction.y * 0.5f) + 0.5f, 0);
+				// color = new Color((direction.x * 0.5f) + 0.5f, (direction.y * 0.5f) + 0.5f, 0);
+				color = new Color((direction.x), (direction.y), 0);
 			}
 
 			md.SetVertexColor(i, color);
