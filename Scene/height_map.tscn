@@ -3,9 +3,9 @@
 [ext_resource type="Script" path="res://Script/HeightMap.cs" id="1_rlbwv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hxnsw"]
+shading_mode = 0
 vertex_color_use_as_albedo = true
 albedo_color = Color(0.791532, 0.778292, 0.742425, 1)
-rim = 0.01
 
 [node name="HeightMap" type="Node3D"]
 script = ExtResource("1_rlbwv")

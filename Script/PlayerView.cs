@@ -28,6 +28,12 @@ internal partial class PlayerView : Node3D
 
 		_pivot!.GlobalPosition = new Vector3(GlobalPosition.x, GetNode<RayCast3D>("RayCast3D").GetCollisionPoint().y, GlobalPosition.z);
 
+		Vector2 _controller_pan = Input.GetVector("pan_left", "pan_right", "pan_down", "pan_up");
+		_controller_pan.x *= -1;
+		_controller_pan *= 2;
+
+		_mouse_motion += _controller_pan;
+
 		RotateY(_mouse_motion.x * (float) delta); // TODO: make this rotate on global y instead of local
 		_pivot!.RotateX(_mouse_motion.y * (float) delta);
 		// RotateObjectLocal(new Vector3(1, 0, 0), _mouse_motion.y * (float) delta); // this should rotate the camera, but that has a weird problem
@@ -38,14 +44,9 @@ internal partial class PlayerView : Node3D
 		
 		_mouse_motion = new Vector2(0, 0);
 
-		if (Input.IsActionPressed("zoom_in"))
-		{
-			GetNode<Camera3D>("Pivot/Camera").Translate(new Vector3(0, 0, -10) * (float)delta);
-		}
-		if (Input.IsActionPressed("zoom_out"))
-		{
-			GetNode<Camera3D>("Pivot/Camera").Translate(new Vector3(0, 0, 10) * (float)delta);
-		}
+		float _zoom_amount = Input.GetAxis("zoom_out", "zoom_in") * 10;
+
+		GetNode<Camera3D>("Pivot/Camera").Translate(new Vector3(0, 0, _zoom_amount) * (float)delta);
 	}
 
 	public override void _UnhandledInput(InputEvent e)

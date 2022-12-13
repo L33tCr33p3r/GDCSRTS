@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://b7w4ykum7hon5"]
+[gd_scene load_steps=8 format=3 uid="uid://b7w4ykum7hon5"]
 
 [ext_resource type="PackedScene" uid="uid://rsr4stqjuj4u" path="res://Scene/height_map.tscn" id="1_31ips"]
 [ext_resource type="PackedScene" uid="uid://b6th8j088573c" path="res://Scene/level.tscn" id="1_3856h"]
 [ext_resource type="PackedScene" uid="uid://djnqk1ydbx6q2" path="res://Scene/player_view.tscn" id="2_a6eb6"]
-[ext_resource type="PackedScene" uid="uid://bjs7td6jth0te" path="res://Scene/flow_field_navigator.tscn" id="2_t8ukk"]
-[ext_resource type="Script" path="res://Script/flow_field_navigator.cs" id="3_nya8x"]
+[ext_resource type="PackedScene" uid="uid://uthf4tbnx4jq" path="res://Scene/unit.tscn" id="2_d3c8w"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8lkj8"]
 sky_top_color = Color(0.166693, 0.278151, 0.419402, 1)
@@ -26,8 +25,7 @@ tonemap_white = 16.0
 
 [node name="Level" parent="." instance=ExtResource("1_3856h")]
 
-[node name="FlowFieldNavigator" parent="Level" instance=ExtResource("2_t8ukk")]
-script = ExtResource("3_nya8x")
+[node name="Unit" parent="Level" instance=ExtResource("2_d3c8w")]
 
 [node name="HeightMap" parent="Level" instance=ExtResource("1_31ips")]
 

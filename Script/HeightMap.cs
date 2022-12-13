@@ -10,7 +10,7 @@ internal partial class HeightMap : Node
 
 	public override void _EnterTree()
 	{
-		GenerateData(0);
+		GenerateData(1);
 		field = new(this, new Vector2i(size / 2, size / 2), Vector2.Zero, 0.2f); // DEBUG
 		GenerateMesh();
 	}
@@ -74,15 +74,18 @@ internal partial class HeightMap : Node
 			// }
 			// else
 			// {
-			// 	color = new((float)distance * 0.1f % 1, (float)distance * 0.1f % 1, (float)distance * 0.1f % 1);
+			// 	color = new((float)distance * 0.02f % 1, (float)distance * 0.02f % 1, (float)distance * 0.02f % 1);
 			// }
 
-			Vector2 direction = field.FlowPathSample(this, new Vector2i(i % size, i / size), 0.2f);
+			// Vector2 direction = (new Vector2(200, 200) - new Vector2(i%size, i/size)).Normalized();
+			Vector2 direction = field.VectorPathSample(new Vector2i(i % size, i / size), 1, 1);
+			// Vector2 direction = field.FlowPathSample(this, new Vector2i(i % size, i / size), 0.2f);
 			if (direction != new Vector2(0, 0)) 
 			{
-				// color = new Color((direction.x * 0.5f) + 0.5f, (direction.y * 0.5f) + 0.5f, 0);
-				color = new Color((direction.x), (direction.y), 0);
+				color = new Color((direction.x * 0.5f) + 0.5f, (direction.y * 0.5f) + 0.5f, 0);
+				// color = new Color((direction.x), (direction.y), 0);
 			}
+
 
 			md.SetVertexColor(i, color);
 			// END DEBUG

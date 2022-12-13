@@ -12,7 +12,6 @@ internal partial class Unit : Node3D
 
 	// Properties (ALL OF THESE ARE PUBLIC)
 	public Guid Id { get { return _id; } }
-	[Export]
 	public Player Owner { get; init; }
 
 	// Called when the node enters the scene tree for the first time.
@@ -24,6 +23,19 @@ internal partial class Unit : Node3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		Vector2 direction = GetNode<HeightMap>("../HeightMap").field.VectorPathSample(new Vector2(GlobalPosition.x, GlobalPosition.z), 10, delta);
+		if (direction != new Vector2()) 
+		{
+			LookAt(new Vector3(GlobalPosition.x + direction.x, GlobalPosition.y, GlobalPosition.z + direction.y));
+		}
+		else
+		{
+			LookAt(new Vector3(GlobalPosition.x, 10, GlobalPosition.z + 0.1f));
+		}
+
+		Position += new Vector3(direction.x, 0, direction.y);
+		GlobalPosition = new Vector3(Position.x, GetNode<HeightMap>("../HeightMap").Ground![(int) GlobalPosition.x, (int) GlobalPosition.z] + 1.0f, Position.z);
+
 		RunAI(delta);
 	}
 

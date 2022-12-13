@@ -28,7 +28,7 @@ internal class FlowField
 		}
 
 		GenerateDistanceField(heightMap, (Vector2i) targetPosition, maxSlope);
-		GenerateFlowPath(heightMap, (Vector2i) startPosition, maxSlope);
+		GenerateFlowPath(heightMap, (Vector2i) targetPosition, (Vector2i) startPosition, maxSlope);
 		GenerateVectorPath(heightMap, targetPosition, startPosition, maxSlope);
 	}
 
@@ -134,14 +134,15 @@ internal class FlowField
 	/// <param name="heightMap"></param>
 	/// <param name="startPoint"></param>
 	/// <param name="maxSlope"></param>
-	private void GenerateFlowPath(HeightMap heightMap, Vector2i startPoint, float maxSlope)
+	private void GenerateFlowPath(HeightMap heightMap, Vector2i targetPoint, Vector2i startPoint, float maxSlope)
 	{
-		var currentNode = startPoint;
-		FlowPath.Add(currentNode);
-		while (DistanceField[currentNode.x, currentNode.y] != 0)
+		var currentPoint = startPoint;
+		FlowPath.Add(currentPoint);
+		// while (DistanceField[currentPoint.x, currentPoint.y] != 0)
+		for (int i = 0; i < 10000; i++)
 		{
-			currentNode += FlowPathSample(heightMap, startPoint, maxSlope);
-			FlowPath.Add(currentNode);
+			currentPoint += FlowPathSample(heightMap, currentPoint, maxSlope);
+			FlowPath.Add(currentPoint);
 		}
 	}
 
@@ -169,12 +170,12 @@ internal class FlowField
 
 				currentVectorStart = currentVectorEnd;
 				currentVectorEnd = targetPosition;
-				currentFlowPathIndex = FlowPath.Count - 1;
+				currentFlowPathIndex = FlowPath.Count;
 			}
 			else
 			{
-				currentVectorEnd = FlowPath[currentFlowPathIndex];
 				currentFlowPathIndex--;
+				currentVectorEnd = FlowPath[currentFlowPathIndex];
 			}
 		}
 	}
@@ -262,7 +263,7 @@ internal class FlowField
 			targetIndex ??= i + 1;
 			closestDistance ??= currentDistance;
 
-			if (closestDistance > currentDistance)
+			if (closestDistance >= currentDistance)
 			{
 				targetIndex = i + 1;
 				closestDistance = currentDistance;
@@ -281,13 +282,18 @@ internal class FlowField
 				finalMove += (currentTarget - currentPosition).Normalized() * (float) unitMovementRemaining;
 				break;
 			}
+			else if (targetIndex == VectorPath.Count - 1)
+			{
+				finalMove += currentTarget - currentPosition;
+				break;
+			}
 			else
 			{
 				finalMove += currentTarget - currentPosition;
 				unitMovementRemaining -= (currentTarget - currentPosition).Length();
-				targetIndex++;
 				currentPosition = currentTarget;
-				currentTarget = VectorPath[(int)targetIndex!];
+				targetIndex++;
+				currentTarget = VectorPath[(int) targetIndex];
 			}
 		}
 

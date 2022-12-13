@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bwod4accxp8ga"]
+[gd_scene load_steps=8 format=3 uid="uid://uthf4tbnx4jq"]
 
 [ext_resource type="Script" path="res://Script/Unit/Unit.cs" id="1_j7fxo"]
 [ext_resource type="Script" path="res://Script/Unit/TurretHardpoint.cs" id="2_ordao"]
