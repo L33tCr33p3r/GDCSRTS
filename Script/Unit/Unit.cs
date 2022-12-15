@@ -12,7 +12,7 @@ internal partial class Unit : Node3D
 
 	// Properties (ALL OF THESE ARE PUBLIC)
 	public Guid Id { get { return _id; } }
-	public Player Owner { get; init; }
+	//public Player Owner { get; init; }
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

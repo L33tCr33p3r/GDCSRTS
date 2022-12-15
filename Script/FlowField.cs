@@ -124,12 +124,12 @@ internal class FlowField
 					}
 				}
 			}
-		} 
+		}
 		while (fieldChanged);
 	}
 
 	/// <summary>
-	/// Generates the node path from the unit's initial position to the path's end
+	/// Generates the path through the flowfield from the unit's initial position to the path's end
 	/// </summary>
 	/// <param name="heightMap"></param>
 	/// <param name="startPoint"></param>
@@ -158,13 +158,30 @@ internal class FlowField
 		var currentVectorStart = startPosition;
 		var currentVectorEnd = targetPosition;
 
-		var currentFlowPathIndex = FlowPath.Count - 1;
+		var currentFlowPathIndex = FlowPath.Count;
 
 		VectorPath.Add(currentVectorStart);
 
-		while (currentVectorStart != currentVectorEnd)
+		while (currentVectorStart != targetPosition)
 		{
-			if (IsPathAllowed(heightMap, currentVectorStart, currentVectorEnd, maxSlope))
+
+			if (currentVectorStart == currentVectorEnd)
+			{
+				if (currentFlowPathIndex + 1 >= FlowPath.Count)
+				{
+					VectorPath.Add(targetPosition);
+					break;
+				}
+				else
+				{
+					VectorPath.Add(FlowPath[currentFlowPathIndex + 1]);
+					
+					currentVectorStart = FlowPath[currentFlowPathIndex + 1];
+					currentVectorEnd = targetPosition;
+					currentFlowPathIndex = FlowPath.Count;
+				}
+			}
+			else if (IsPathAllowed(heightMap, currentVectorStart, currentVectorEnd, maxSlope))
 			{
 				VectorPath.Add(currentVectorEnd);
 
@@ -229,7 +246,6 @@ internal class FlowField
 
 		for (int i = 0; i < points.Count - 1; i++)
 		{
-
 			var current = points[i];
 			var next = points[i + 1];
 
